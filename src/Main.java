@@ -40,7 +40,11 @@ public class Main {
             }
             else if(ch == 'N')
             {
+                Point point = new Point();
+                point.x = scanner.nextDouble();
+                point.y = scanner.nextDouble();
 
+                kdTree.nearestNeighbour(point);
             }
             else
             {

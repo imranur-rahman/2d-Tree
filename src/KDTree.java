@@ -116,6 +116,74 @@ public class KDTree {
             reportSubtree(now.right, allPoints);
     }
 
+    public void nearestNeighbour(Point y)
+    {
+        Node best = searchKDTree(root, y, null);
+        System.out.println(distance(best.point, y) + " " + best.point);
+    }
+
+    private Node searchKDTree(Node here, Point y, Node best)
+    {
+        if(here == null)
+            return best;
+        if(best == null)
+            best = here;
+        if(distance(here.point, y) < distance(best.point, y))
+            best = here;
+
+        // Determine on which side of the hyperplane the query point is located
+        Node child_near, child_far;
+        int axis = here.depth % 2;// 0->x, 1->y
+        if(axis == 0)
+        {
+            if(y.x < here.point.x)
+            {
+                child_near = here.left;
+                child_far = here.right;
+            }
+            else
+            {
+                child_near = here.right;
+                child_far = here.left;
+            }
+        }
+        else
+        {
+            if(y.y < here.point.y)
+            {
+                child_near = here.left;
+                child_far = here.right;
+            }
+            else
+            {
+                child_near = here.right;
+                child_far = here.left;
+            }
+        }
+
+        // Descend the near branch
+        best = searchKDTree(child_near, y, best);
+        // Descend the far branch if lower bound does not exceed current best
+        if(distance_lb(here, y) < distance(best.point, y))
+            best = searchKDTree(child_far, y, best);
+
+        return best;
+    }
+
+    private double distance_lb(Node node, Point y) {
+        int axis = node.depth % 2;
+        if (axis == 0)
+            return Math.abs(node.point.x - y.x);
+        else
+            return Math.abs(node.point.y - y.y);
+    }
+
+    private double distance(Point from, Point to) {
+        double x = from.x - to.x;
+        double y = from.y - to.y;
+        return Math.sqrt(x * x  +  y * y);
+    }
+
     public void printTree(Node now)
     {
         if(now == null) return;
