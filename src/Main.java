@@ -6,6 +6,7 @@ public class Main {
     static Point[] arr;
     static KDTree kdTree = new KDTree();
     public static void main(String[] args) throws IOException {
+        PrintWriter printWriter = new PrintWriter("output.txt");
         Scanner scanner = new Scanner(new FileReader("src/input.txt"));
         n = scanner.nextInt();
         arr = new Point[n];
@@ -36,7 +37,7 @@ public class Main {
                 range.xmax = scanner.nextDouble();
                 range.ymax = scanner.nextDouble();
 
-                kdTree.query(range);
+                kdTree.query(range, printWriter);
             }
             else if(ch == 'N')
             {
@@ -44,7 +45,7 @@ public class Main {
                 point.x = scanner.nextDouble();
                 point.y = scanner.nextDouble();
 
-                kdTree.nearestNeighbour(point);
+                kdTree.nearestNeighbour(point, printWriter);
             }
             else
             {
@@ -52,5 +53,6 @@ public class Main {
                 break;
             }
         }
+        printWriter.flush();
     }
 }

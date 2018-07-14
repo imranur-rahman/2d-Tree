@@ -1,3 +1,5 @@
+import java.io.FileOutputStream;
+import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -72,13 +74,19 @@ public class KDTree {
         return new Node(point, left, right, depth, range);
     }
 
-    public void query(Range range)
+    public void query(Range range, PrintWriter printWriter)
     {
         Set<Point>allPoints = new HashSet<>();
         queryUtil(root, range, allPoints);
-        //System.out.println(range);
+
         System.out.println(allPoints);
         System.out.println(allPoints.size());
+
+        printWriter.println("R");
+        /*printWriter.println(allPoints.size());
+        for(Point point: allPoints)
+            printWriter.println(point.x + " " + point.y);*/
+        printWriter.println(range.xmin + " " + range.ymin + " " + range.xmax + " " + range.ymax);
     }
 
     private void queryUtil(Node now, Range range, Set<Point> allPoints) {
@@ -116,10 +124,13 @@ public class KDTree {
             reportSubtree(now.right, allPoints);
     }
 
-    public void nearestNeighbour(Point y)
+    public void nearestNeighbour(Point y, PrintWriter printWriter)
     {
         Node best = searchKDTree(root, y, null);
         System.out.println(distance(best.point, y) + " " + best.point);
+        printWriter.println("N");
+        printWriter.println(y.x + " " + y.y);
+        printWriter.println(distance(best.point, y));
     }
 
     private Node searchKDTree(Node here, Point y, Node best)
